@@ -61,6 +61,13 @@ module.exports = function (grunt) {
         sourceMap: true,
         preserveComments: 'some'
       },
+      development: {
+        options: {
+          beautify: true
+        },
+        src: '<%= concat.js.dest %>',
+        dest: '<% dirs.output %>/js/app.min.js'
+      },
       production: {
         src: '<%= concat.js.dest %>',
         dest: '<% dirs.output %>/js/app.min.js'
@@ -122,11 +129,7 @@ module.exports = function (grunt) {
 
   var env = grunt.config('env');
 
-  var jsTasks = ['jshint:' + env, 'concat'];
-
-  if (env === 'production') {
-    jsTasks.push('uglify');
-  }
+  var jsTasks = ['jshint:' + env, 'concat', 'uglify:' + env];
   grunt.registerTask('dist-js');
 
   var cssTasks = ['compass:' + env];
