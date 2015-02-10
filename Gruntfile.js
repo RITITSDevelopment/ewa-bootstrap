@@ -70,7 +70,7 @@ module.exports = function (grunt) {
     compass: {
       options: {
         // optional config file for Compass
-        config: '<%= dirs.source %>/config/config.rb',
+        config: 'config/config.rb',
         sassDir: '<%= dirs.source %>/sass',
         cssDir: '<%= dirs.output %>/css'
       },
@@ -80,6 +80,34 @@ module.exports = function (grunt) {
       production: {
         environment: 'production'
       }
+    },
+
+    watch: {
+      gruntfile: {
+        files: 'Gruntfile.js',
+        options: {
+          reload: true
+        }
+      },
+      js: {
+        files: '<%= jshint.development.src %>',
+        tasks: ['jshint:development', 'concat']
+      },
+      sass: {
+        files: ['<%= compass.options.sassDir %>/**/*.sass'],
+        tasks: ['compass']
+      },
+      livereload: {
+        files: ['<%= dirs.output %>/**/*', '**/*.html'],
+        options: {
+          livereload: true
+        }
+      }
+    },
+
+    clean: {
+      temp: '<%= dirs.temp %>',
+      dist: '<%= dirs.dist %>'
     }
 
   });
@@ -92,12 +120,19 @@ module.exports = function (grunt) {
   grunt.loadNpmTasks('grunt-contrib-clean');
   grunt.loadNpmTasks('grunt-notify');
 
-  var defaultTasks = ['concat', 'compass:' + grunt.config('env')];
+  var env = grunt.config('env');
 
-  // Only register these tasks in production mode.
-  if (grunt.config('env') === 'production') {
-    defaultTasks.push('uglify');
+  var jsTasks = ['jshint:' + env, 'concat'];
+
+  if (env === 'production') {
+    jsTasks.push('uglify');
   }
-  grunt.registerTask('default', defaultTasks);
+  grunt.registerTask('dist-js');
+
+  var cssTasks = ['compass:' + env];
+  grunt.registerTask('dist-css', cssTasks);
+
+  grunt.registerTask('dist', ['clean:dist', 'dist-css', 'dist-js']);
+  grunt.registerTask('default', ['dist']);
 
 };
