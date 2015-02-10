@@ -25,6 +25,30 @@ module.exports = function (grunt) {
 
     // Task configurations.
 
+    jshint: {
+      options: {
+        // Set to false to fail the task on jshint errors.
+        force: true,
+        // Define globals. Defaulting to jQuery, AngularJS and UnderscoreJS.
+        globals: {
+          jQuery: true,
+          angular: true,
+          _: true
+        },
+        browser: true
+      },
+      development: {
+        options: {
+          // Allow use of debug statements.
+          devel: true
+        },
+        src: ['<%= dirs.source %>/js/**/*.js']
+      },
+      production: {
+        src: ['<%= dirs.source %>/js/**/*.js']
+      }
+    },
+
     concat: {
       js: {
         src: ['<%= dirs.source %>/js/**/*.js'],
@@ -60,11 +84,13 @@ module.exports = function (grunt) {
 
   });
 
+  grunt.loadNpmTasks('grunt-contrib-jshint');
   grunt.loadNpmTasks('grunt-contrib-concat');
   grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-contrib-compass');
   grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-contrib-clean');
+  grunt.loadNpmTasks('grunt-notify');
 
   var defaultTasks = ['concat', 'compass:' + grunt.config('env')];
 
