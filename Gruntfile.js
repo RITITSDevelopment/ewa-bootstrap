@@ -17,9 +17,10 @@ module.exports = function (grunt) {
 
     // Determine the environment to build the app. It first checks for an
     // `--env` option supplied by the user when running grunt (e.g.
-    // `grunt --env=prod`). If there is no option specified, it searches for the
-    // environment variable `GRUNT_ENV`. Finally, it defaults to dev.
-    env: grunt.option('env') || process.env.GRUNT_ENV || 'dev',
+    // `grunt --env=production`). If there is no option specified,
+    // it searches for the environment variable `GRUNT_ENV`.
+    // Finally, it defaults to development.
+    env: grunt.option('env') || process.env.GRUNT_ENV || 'development',
 
 
     // Task configurations.
@@ -29,16 +30,31 @@ module.exports = function (grunt) {
         src: ['<%= dirs.source %>/js/**/*.js'],
         dest: '<%= dirs.output %>/js/app.js'
       }
-    }
+    },
 
     uglify: {
       options: {
         sourceMap: true,
         preserveComments: 'some'
       },
-      prod: {
+      production: {
         src: '<%= concat.js.dest %>',
         dest: '<% dirs.output %>/js/app.min.js'
+      }
+    },
+
+    compass: {
+      options: {
+        // optional config file for Compass
+        config: '<%= dirs.source %>/config/config.rb',
+        sassDir: '<%= dirs.source %>/sass',
+        cssDir: '<%= dirs.output %>/css'
+      },
+      development: {
+        environment: 'development'
+      },
+      production: {
+        environment: 'production'
       }
     }
 
@@ -46,13 +62,14 @@ module.exports = function (grunt) {
 
   grunt.loadNpmTasks('grunt-contrib-concat');
   grunt.loadNpmTasks('grunt-contrib-uglify');
+  grunt.loadNpmTasks('grunt-contrib-compass');
   grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-contrib-clean');
 
-  var defaultTasks = ['concat'];
+  var defaultTasks = ['concat', 'compass:' + grunt.config('env')];
 
   // Only register these tasks in production mode.
-  if (grunt.config('env') === 'prod') {
+  if (grunt.config('env') === 'production') {
     defaultTasks.push('uglify');
   }
   grunt.registerTask('default', defaultTasks);

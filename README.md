@@ -1,3 +1,3 @@
 # ewa-bootstrap
 
-EWA client bootstrap and workflow.
+EWA client-side bootstrap and workflow.
