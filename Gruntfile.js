@@ -52,9 +52,12 @@ module.exports = function (grunt) {
     },
 
     concat: {
+      options: {
+        separator: ';'
+      },
       js: {
-        // Define each file to concatenate here.
-        src: ['<%= dirs.source %>/js/bootstrap.js'],
+        // Define each file to concatenate here. Make sure they are in the correct order.
+        src: ['<%= dirs.source %>/js/bootstrap.js', '<%= dirs.source %>/js/app.js'],
         dest: '<%= dirs.output %>/js/app.js'
       }
     },
@@ -119,7 +122,7 @@ module.exports = function (grunt) {
         }
       },
       js: {
-        files: '<%= jshint.development.src %>',
+        files: ['<%= dirs.source %>/js/**/*.js'],
         tasks: ['jshint:development', 'concat', 'uglify:development']
       },
       css: {
@@ -141,8 +144,8 @@ module.exports = function (grunt) {
           port: 9001,
           // Set this to the folder containing index.html, relative to Gruntfile.
           base: '.',
-          directory: true,
-          livereload: true
+          livereload: true,
+          keepalive: true
         }
       }
     },
@@ -165,6 +168,10 @@ module.exports = function (grunt) {
   grunt.task.run('notify_hooks');
 
   var env = grunt.config('env');
+  // Force env to be development if it's not exactly production
+  if (env !== 'production') {
+    env = 'development';
+  }
 
   var jsTasks = ['jshint:' + env, 'concat', 'uglify:' + env];
   grunt.registerTask('dist-js', jsTasks);
@@ -173,10 +180,16 @@ module.exports = function (grunt) {
   grunt.registerTask('dist-css', cssTasks);
 
   grunt.config('concurrent', {
-    dist: ['dist-js', 'dist-css']
+    dist: ['dist-js', 'dist-css'],
+    livereload: {
+      options: {
+        logConcurrentOutput: true
+      },
+      tasks: ['connect', 'watch']
+    }
   });
 
   grunt.registerTask('dist', ['clean:dist', 'concurrent:dist']);
-  grunt.registerTask('default', ['dist']);
+  grunt.registerTask('default', ['clean', 'concurrent:dist', 'concurrent:livereload']);
 
 };
