@@ -27,7 +27,7 @@ module.exports = function (grunt) {
 
     jshint: {
       options: {
-        // Files and dirs to ignore.
+        // Files to skip linting.
         ignores: ['<%= dirs.source %>/js/bootstrap*', '<%= dirs.source %>/js/bootstrap/*'],
         // Set to false to fail the task on jshint errors.
         force: true,
@@ -57,7 +57,11 @@ module.exports = function (grunt) {
       },
       js: {
         // Define each file to concatenate here. Make sure they are in the correct order.
-        src: ['<%= dirs.source %>/js/bootstrap.js', '<%= dirs.source %>/js/app.js'],
+        src: [
+          '<%= dirs.source %>/js/bootstrap.js',
+          '<%= dirs.source %>/vendor/angular/angular.js',
+          '<%= dirs.source %>/js/app.js'
+        ],
         dest: '<%= dirs.output %>/js/app.js'
       }
     },
@@ -123,11 +127,15 @@ module.exports = function (grunt) {
       },
       js: {
         files: ['<%= dirs.source %>/js/**/*.js'],
-        tasks: ['jshint:development', 'concat', 'uglify:development']
+        tasks: ['newer:jshint:development', 'concat', 'uglify:development']
       },
       css: {
-        files: ['<%= compass.options.sassDir %>/**/*.sass'],
-        tasks: ['compass:development', 'autoprefixer', 'bless']
+        files: ['<%= compass.options.sassDir %>/**/*.{scss,sass}'],
+        tasks: ['compass:development']
+      },
+      images: {
+        files: ['<%= dirs.source %>/images/**/*.{png,jpg,gif}'],
+        tasks: ['newer:imagemin']
       },
       livereload: {
         files: ['<%= dirs.output %>/**/*', '**/*.html'],
@@ -159,6 +167,34 @@ module.exports = function (grunt) {
       options: {
         duration: 3
       }
+    },
+
+    imagemin: {
+      images: {
+        files: [{
+          expand: true,
+          cwd: '<%= dirs.source %>/images/',
+          src: ['**/*.{png,jpg,gif}'],
+          dest: '<%= dirs.output %>/images/'
+        }]
+      }
+    },
+
+    copy: {
+      all: {
+        files: [{
+          expand: true,
+          cwd: '<%= dirs.source %>/fonts/',
+          src: ['**'],
+          dest: '<%= dirs.output %>/fonts/'
+        },
+        {
+          expand: true,
+          cwd: '<%= dirs.source %>/vendor/',
+          src: ['**'],
+          dest: '<%= dirs.output %>/vendor/'
+        }]
+      }
     }
 
   });
@@ -179,8 +215,11 @@ module.exports = function (grunt) {
   var cssTasks = ['compass:' + env, 'autoprefixer', 'bless'];
   grunt.registerTask('dist-css', cssTasks);
 
+  var imgTasks = ['imagemin'];
+  grunt.registerTask('dist-images', imgTasks);
+
   grunt.config('concurrent', {
-    dist: ['dist-js', 'dist-css'],
+    dist: ['dist-js', 'dist-css', 'dist-images', 'copy'],
     livereload: {
       options: {
         logConcurrentOutput: true

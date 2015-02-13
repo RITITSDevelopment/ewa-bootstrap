@@ -6,3 +6,5 @@
 
 **/*.log
 Gemfile.lock
+
+vendor/
