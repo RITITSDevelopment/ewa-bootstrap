@@ -4,8 +4,8 @@
 
 (function(angular) {
 
-angular.module('ewa.components', ['ewa.components.tpls', 'ewa.components.ritHeader', 'ewa.components.ritBranding']);
-angular.module('ewa.components.tpls', ['templates/rit-header/rit-header.html', 'templates/rit-branding/rit-branding.html']);
+angular.module('ewa.components', ['ewa.components.tpls', 'ewa.components.ritHeader', 'ewa.components.ritBranding', 'ewa.components.ritMenubar']);
+angular.module('ewa.components.tpls', ['templates/rit-header/rit-header.html', 'templates/rit-branding/rit-branding.html', 'templates/rit-menubar/rit-menubar.html']);
 
 angular.module('ewa.components.ritHeader', [])
 .directive('ritHeader', function() {
@@ -22,8 +22,18 @@ angular.module('ewa.components.ritBranding', [])
     templateUrl: 'templates/rit-branding/rit-branding.html',
     scope: {
       title: '@ritBrandingTitle',
-      subtitle: '@ritBrandingSubtitle'
+      subtitle: '@ritBrandingSubtitle',
+      link: '@ritBrandingLink'
     }
+  };
+});
+
+angular.module('ewa.components.ritMenubar', [])
+.directive('ritMenubar', function() {
+  return {
+    restrict: 'E',
+    templateUrl: 'templates/rit-menubar/rit-menubar.html',
+    transclude: true
   };
 });
 
@@ -51,9 +61,19 @@ angular.module('templates/rit-branding/rit-branding.html', []).run(['$templateCa
     '<div class="branding-wrapper">' +
       '<div class="branding container">' +
         '<h1 class="branding-logo">' +
-          '<a href="/">{{title}}</a> ' +
+          '<a href="{{link}}">{{title}}</a> ' +
           '<small>{{subtitle}}</small>' +
         '</h1>' +
+      '</div>' +
+    '</div>'
+  );
+}]);
+
+angular.module('templates/rit-menubar/rit-menubar.html', []).run(['$templateCache', function($templateCache){
+  $templateCache.put('templates/rit-menubar/rit-menubar.html',
+    '<div class="menubar">' +
+      '<div class="container">' +
+        '<ul class="nav nav-pills nav-justified" ng-transclude></ul>' +
       '</div>' +
     '</div>'
   );

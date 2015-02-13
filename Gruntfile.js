@@ -73,7 +73,8 @@ module.exports = function (grunt) {
       },
       development: {
         options: {
-          beautify: true
+          beautify: true,
+          preserveComments: 'all'
         },
         src: '<%= concat.js.dest %>',
         dest: '<%= dirs.output %>/js/app.min.js'
