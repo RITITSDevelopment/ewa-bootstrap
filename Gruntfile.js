@@ -60,6 +60,7 @@ module.exports = function (grunt) {
         src: [
           '<%= dirs.source %>/js/bootstrap.js',
           '<%= dirs.source %>/vendor/angular/angular.js',
+          '<%= dirs.source %>/js/ewa-components.js',
           '<%= dirs.source %>/js/app.js'
         ],
         dest: '<%= dirs.output %>/js/app.js'

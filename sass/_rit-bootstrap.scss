@@ -1,0 +1,80 @@
+@import "compass/typography/links";
+
+/*
+ * Variables
+ */
+$branding-padding: 30px;
+$menubar-link-padding: 15px;
+
+
+
+/*
+ * Top RIT header
+ */
+.ritheader {
+  background-color: $brand-primary;
+  color: #fff;
+  border: 0px;
+  border-radius: 0px;
+  margin: 0;
+
+  .navbar-nav.nav {
+    > li {
+      > a {
+        @include link-colors(#fff);
+        @include hover-link;
+      }
+    }
+  }
+
+  .navbar-brand {
+    padding-top: 0;
+    padding-bottom: 0;
+
+    > img {
+      height: 100%;
+    }
+  }
+}
+
+
+
+/*
+ * Branding area
+ */
+.branding-wrapper {
+  background-color: #393939;
+}
+
+.branding {
+  padding-top: $branding-padding;
+  padding-bottom: $branding-padding;
+}
+
+.branding-logo {
+  margin-top: 0;
+  margin-bottom: 0;
+
+  a {
+    @include unstyled-link;
+    @include link-colors(#fff);
+  }
+}
+
+
+
+/*
+ * Main menu bar
+ */
+.menubar {
+  background-color: $gray-lighter;
+
+  .nav {
+    > li {
+      > a {
+        padding-top: $menubar-link-padding;
+        padding-bottom: $menubar-link-padding;
+      }
+    }
+  }
+}

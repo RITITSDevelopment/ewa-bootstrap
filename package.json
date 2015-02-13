@@ -1,6 +1,6 @@
 {
   "name": "ewa-bootstrap",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Configurations and reusable components to quickly start up an EWA-supported client-side application.",
   "author": "Khanh Ho <kchisd@rit.edu>",
   "repository": {
