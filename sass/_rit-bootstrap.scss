@@ -5,6 +5,7 @@
  */
 $branding-padding: 30px;
 $menubar-link-padding: 15px;
+$footer-padding: $font-size-base;
 
 
 
@@ -78,3 +79,58 @@ $menubar-link-padding: 15px;
     }
   }
 }
+
+
+
+/*
+ * Standard Footer
+ */
+.footer-wrapper {
+  background-color: #393939;
+  color: #b4b4b4;
+
+  .row {
+    padding-top: $footer-padding;
+    padding-bottom: $footer-padding;
+
+    a {
+      @include link-colors(#fff);
+      @include hover-link;
+    }
+  }
+}
+
+.text-right-sm {
+  @extend .text-right;
+
+  @media (max-width: $grid-float-breakpoint-max) {
+    text-align: left;
+  }
+}
+
+// Sticky footer
+// html, body {
+//   height: 100%;
+//   margin: 0;
+// }
+// .main {
+//   display: table;
+//   height: 100%;
+//   width: 100%;
+//   & > * {
+//     width: 100%;
+//   }
+// }
+// .content-wrapper {
+//   display: table-row;
+//   height: 100%;
+//   .content {
+//     height: 100%;
+//     .row {
+//       height: 100%;
+//     }
+//   }
+// }
+// .footer-wrapper {
+//   display: table-row;
+// }

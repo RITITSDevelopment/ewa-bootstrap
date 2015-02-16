@@ -4,8 +4,8 @@
 
 (function(angular) {
 
-angular.module('ewa.components', ['ewa.components.tpls', 'ewa.components.ritHeader', 'ewa.components.ritBranding', 'ewa.components.ritMenubar']);
-angular.module('ewa.components.tpls', ['templates/rit-header/rit-header.html', 'templates/rit-branding/rit-branding.html', 'templates/rit-menubar/rit-menubar.html']);
+angular.module('ewa.components', ['ewa.components.tpls', 'ewa.components.ritHeader', 'ewa.components.ritBranding', 'ewa.components.ritMenubar', 'ewa.components.ritFooter']);
+angular.module('ewa.components.tpls', ['templates/rit-header/rit-header.html', 'templates/rit-branding/rit-branding.html', 'templates/rit-menubar/rit-menubar.html', 'templates/rit-footer/rit-footer.html']);
 
 angular.module('ewa.components.ritHeader', [])
 .directive('ritHeader', function() {
@@ -34,6 +34,14 @@ angular.module('ewa.components.ritMenubar', [])
     restrict: 'E',
     templateUrl: 'templates/rit-menubar/rit-menubar.html',
     transclude: true
+  };
+});
+
+angular.module('ewa.components.ritFooter', [])
+.directive('ritFooter', function() {
+  return {
+    restrict: 'E',
+    templateUrl: 'templates/rit-footer/rit-footer.html'
   };
 });
 
@@ -75,6 +83,31 @@ angular.module('templates/rit-menubar/rit-menubar.html', []).run(['$templateCach
       '<div class="container">' +
         '<ul class="nav nav-pills nav-justified" ng-transclude></ul>' +
       '</div>' +
+    '</div>'
+  );
+}]);
+
+angular.module('templates/rit-footer/rit-footer.html', []).run(['$templateCache', function($templateCache){
+  $templateCache.put('templates/rit-footer/rit-footer.html',
+    '<div class="footer-wrapper" id="bottom">' +
+      '<footer id="footer" class="footer container">' +
+        '<div class="row">' +
+          '<div class="col-sm-6">' +
+            '<small>Copyright 2014 &copy; Rochester Institute of Technology</small><br>' +
+            '<small>All Rights Reserved | ' +
+              '<a href="http://www.rit.edu/legal/disclaimer_page.html">Disclaimer</a> | ' +
+              '<a href="http://www.rit.edu/dmca.html">Copyright Infringement</a>' +
+            '</small>' +
+          '</div>' +
+          '<div class="col-sm-6 text-right-sm">' +
+            '<small>One Lomb Memorial Drive, Rochester, NY 14623-5603</small><br> ' +
+            '<small>Questions or comments? ' +
+              '<a href="http://www.rit.edu/ask/">Send us feedback.</a> ' +
+              'Telephone: 585-475-2411' +
+            '</small>' +
+          '</div>' +
+        '</div>' +
+      '</footer>' +
     '</div>'
   );
 }]);
