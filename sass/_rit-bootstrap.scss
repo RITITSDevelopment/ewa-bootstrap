@@ -75,6 +75,7 @@ $footer-padding: $font-size-base;
       > a {
         padding-top: $menubar-link-padding;
         padding-bottom: $menubar-link-padding;
+        @include link-colors(#000, $brand-primary, $brand-primary);
       }
     }
   }
