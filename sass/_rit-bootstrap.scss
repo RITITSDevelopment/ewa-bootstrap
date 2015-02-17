@@ -77,6 +77,8 @@ $footer-padding: $font-size-base;
   color: #fff;
 
   .nav {
+    font-size: $font-size-large;
+
     > li {
       > a {
         padding-top: $menubar-link-padding;
