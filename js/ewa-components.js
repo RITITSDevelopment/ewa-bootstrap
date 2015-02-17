@@ -4,8 +4,8 @@
 
 (function(angular) {
 
-angular.module('ewa.components', ['ewa.components.tpls', 'ewa.components.ritHeader', 'ewa.components.ritBranding', 'ewa.components.ritMenubar', 'ewa.components.ritFooter']);
-angular.module('ewa.components.tpls', ['templates/rit-header/rit-header.html', 'templates/rit-branding/rit-branding.html', 'templates/rit-menubar/rit-menubar.html', 'templates/rit-footer/rit-footer.html']);
+angular.module('ewa.components', ['ewa.components.tpls', 'ewa.components.ritHeader', 'ewa.components.ritMenubar', 'ewa.components.ritFooter']);
+angular.module('ewa.components.tpls', ['templates/rit-header/rit-header.html', 'templates/rit-menubar/rit-menubar.html', 'templates/rit-footer/rit-footer.html']);
 
 angular.module('ewa.components.ritHeader', [])
 .directive('ritHeader', function() {
@@ -15,25 +15,24 @@ angular.module('ewa.components.ritHeader', [])
   };
 });
 
-angular.module('ewa.components.ritBranding', [])
-.directive('ritBranding', function() {
-  return {
-    restrict: 'E',
-    templateUrl: 'templates/rit-branding/rit-branding.html',
-    scope: {
-      title: '@ritBrandingTitle',
-      subtitle: '@ritBrandingSubtitle',
-      link: '@ritBrandingLink'
-    }
-  };
-});
-
 angular.module('ewa.components.ritMenubar', [])
 .directive('ritMenubar', function() {
   return {
     restrict: 'E',
     templateUrl: 'templates/rit-menubar/rit-menubar.html',
-    transclude: true
+    transclude: true,
+    scope: {
+      title: '@ritBrandingTitle',
+      subtitle: '@ritBrandingSubtitle',
+      link: '@ritBrandingLink',
+      user: '@ritBrandingUser'
+    },
+    link: function(scope, element, attrs) {
+      if (angular.isUndefined(attrs.ritBrandingUser)) {
+        element.find('.branding-user').remove();
+        element.find('.branding-logo').css('float', 'left');
+      }
+    }
   };
 });
 
@@ -64,24 +63,28 @@ angular.module('templates/rit-header/rit-header.html', []).run(['$templateCache'
   );
 }]);
 
-angular.module('templates/rit-branding/rit-branding.html', []).run(['$templateCache', function($templateCache){
-  $templateCache.put('templates/rit-branding/rit-branding.html',
-    '<div class="branding-wrapper">' +
-      '<div class="branding container">' +
-        '<h1 class="branding-logo">' +
-          '<a href="{{link}}">{{title}}</a> ' +
-          '<small>{{subtitle}}</small>' +
-        '</h1>' +
-      '</div>' +
-    '</div>'
-  );
-}]);
-
 angular.module('templates/rit-menubar/rit-menubar.html', []).run(['$templateCache', function($templateCache){
   $templateCache.put('templates/rit-menubar/rit-menubar.html',
     '<div class="menubar">' +
+      '<div class="branding-wrapper navbar-inverse">' +
+        '<div class="branding container">' +
+          '<div class="row">' +
+            '<h1 class="branding-logo col-sm-9">' +
+              '<a href="{{link}}">{{title}}</a> ' +
+              '<small>{{subtitle}}</small>' +
+            '</h1>' +
+            '<div class="branding-user col-sm-3 col-xs-6 text-right-sm">{{user}}</div>' +
+            '<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#main-menu">' +
+              '<span class="sr-only">Toggle navigation</span>' +
+              '<span class="icon-bar"></span>' +
+              '<span class="icon-bar"></span>' +
+              '<span class="icon-bar"></span>' +
+            '</button>' +
+          '</div>' +
+        '</div>' +
+      '</div>' +
       '<div class="container">' +
-        '<ul class="nav nav-pills nav-justified" ng-transclude></ul>' +
+        '<ul class="nav nav-pills nav-justified navbar-collapse collapse" id="main-menu" ng-transclude></ul>' +
       '</div>' +
     '</div>'
   );
